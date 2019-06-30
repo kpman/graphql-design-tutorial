@@ -1,31 +1,23 @@
-# [Shopify](https://www.shopify.com) GraphQL Design Tutorial
+# [Shopify](https://www.shopify.com) GraphQL 設計教學
 
-This tutorial was originally created by [Shopify](https://www.shopify.ca/) for internal
-purposes. We've created a public version of it since we think it's useful to
-anyone creating a GraphQL API.
+這份教學原本是 [Shopify](https://www.shopify.ca/) 內部使用，但我們覺得這份教學對其他想要創建 GraphQL API 的人會有幫助，所以我們釋出一份公開版本。
 
-It's based on lessons learned from creating and evolving production schemas at
-Shopify over almost 3 years. The tutorial has evolved and will continue to
-change in the future so nothing is set in stone.
+這份教學是基於 Shopify 三年以上在 production 的經驗累積演化而來，它並非最終版，而是會持續的更新和改進。
 
-We believe these design guidelines work in most cases. They may not all work
-for you. Even within the company we still question them and have exceptions
-since most rules can't apply 100% of the time. So don't just blindly copy and
-implement all of them. Pick and choose which ones make sense for you and your
-use cases.
+我們相信這些設計指南在大部分的情況下都適用，但不一定完全適用你們的情境。即使在 Shopify 公司內部，我們仍然會質疑它們並且有例外，因為大多數規則不能 100％ 適用，所以請勿盲目的複製和實作它們，根據你們的情境挑選適合你們自己的規則。
 
-Read the [full tutorial here](TUTORIAL.md).
+閱讀 [完整教學](TUTORIAL.md)。
 
-## Contributing
-Contributions are welcome; however, this tutorial reflects rules specific to Shopify and
-any substantial changes to those will primarily happen internally and not through external contributions.
+## 貢獻
 
-## Code of Conduct
-Anyone who wishes to contribute through code or issues, take a look at the
-[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+歡迎貢獻；然而，這份教學任何實質上的變化都是由 Shopify 內部發生，而並非透過外部貢獻。
 
-## License
+## 行為守則
 
-MIT, see [LICENSE](LICENSE.txt) for details.
+任何想要貢獻程式碼或是 issue 的人，請閱讀 [行為守則](CODE_OF_CONDUCT.md)。
+
+## 授權
+
+MIT，詳見 [LICENSE](LICENSE.txt)。
 
 <img src="https://cdn.shopify.com/shopify-marketing_assets/builds/19.0.0/shopify-full-color-black.svg" width="200" />
