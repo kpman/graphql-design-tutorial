@@ -1,57 +1,34 @@
-# Tutorial: Designing a GraphQL API
+# 教學: 設計一個 GraphQL API
 
-This tutorial was created by [Shopify](https://www.shopify.ca/) for internal
-purposes. We've created a public version of it since we think it's useful to
-anyone creating a GraphQL API.
+這份教學原本是 [Shopify](https://www.shopify.ca/) 內部使用，但我們覺得這份教學對其他想要創建 GraphQL API 的人會有幫助，所以我們釋出一份公開版本。
 
-It's based on lessons learned from creating and evolving production schemas at
-Shopify over almost 3 years. The tutorial has evolved and will continue to
-change in the future so nothing is set in stone.
+這份教學是基於 Shopify 三年以上在 production 的經驗累積演化而來，它並非最終版，而是會持續的更新和改進。
 
-We believe these design guidelines work in most cases. They may not all work
-for you. Even within the company we still question them and have exceptions
-since most rules can't apply 100% of the time. So don't just blindly copy and
-implement all of them. Pick and choose which ones make sense for you and your
-use cases.
+我們相信這些設計指南在大部分的情況下都適用，但不一定完全適用你們的情境。即使在 Shopify 公司內部，我們仍然會質疑它們並且有例外，因為大多數規則不能 100％ 適用，所以請勿盲目的複製和實作它們，根據你們的情境挑選適合你們自己的規則。
  
-## Intro
+## 介紹
 
-Welcome! This document will walk you through designing a new GraphQL API (or a
-new piece of an existing GraphQL API). API design is a challenging
-task that strongly rewards iteration, experimentation, and a thorough
-understanding of your business domain.
+歡迎！這份文件將會指導你設計新的 GraphQL API (或是已經存在的 GraphQL API). API 設計是很有挑戰性的任務，它需要快速迭代、實驗和完整的了解你的商業範疇。
 
-## Step Zero: Background
+## 第零步: 背景知識
 
-For the purposes of this tutorial, imagine you work at an e-commerce company.
-You have an existing GraphQL API exposing information about your products, but
-very little else. However, your team just finished a project implementing
-"collections" in the back-end and wants to expose collections over the API as
-well.
+在這份教學，試想你正在一家 EC 公司上班。你已經有了 product 資訊的 GraphQL API，但其他相關的資訊很少。然而，你的團隊剛完成 collections 的後端實作，而他們希望將這些資訊也加到 API 上。
 
-Collections are the new go-to method for grouping products; for example, you
-might have a collection of all of your t-shirts. Collections can be used for
-display purposes when browsing your website, and also for programmatic tasks
-(e.g. you may want to make a discount only apply to products in a certain
-collection).
+Collections 是一個分群 product 的新方法，舉例來說：你可能會有一個 collection 包含你所有的 t-shirt。Collections 可以用來當做顯示在網站上資訊的用途，也可能是直接讓程式用。（你可能希望只針對某一個 collection 內的 product 做折扣）
 
-On the back-end, your new feature has been implemented as follows:
-- All collections have some simple attributes like a title, a description body
-  (which may include HTML formatting), and an image.
-- You have two specific kinds of collections: "manual" collections where you
-  list the products you want them to include, and "automatic" collections where
-  you specify some rules and let the collection populate itself.
-- Since the product-to-collection relationship is many-to-many, you've got a
-  join table in the middle called `CollectionMembership`.
-- Collections, like products before them, can be either published (visible on
-  the storefront) or not.
+在後端部分，新功能開發成果如下：
+- 所有的 collections 都有相同的屬性，例如 title、description body（可能會包含 HTML 格式）和 image。
+- 有兩個特別種類的 collections：
+  - "manual" collections：手動列出的 product 清單
+  - "automatic" collections: 根據規則自動產生的清單
+- 因為 product 對應 collection 的關係是多對多，因此有一個 join table 叫做 `CollectionMembership`
+- Collections 就像 products，可以決定上架與否（是否能在店面看到）
 
-With this background, you're ready to start thinking about your API design.
+根據這些背景知識，你可以開始思考關於你的 API 設計了。
 
-## Step One: A Bird's-Eye View
+## 第一步: 鳥瞰圖
 
-A naive version of the schema might look something like this (leaving out all
-the pre-existing types like `Product`):
+初版的 schema 可能會長得像下面這樣（略過先前已經存在的 types，例如：`Product`）：
 ```graphql
 interface Collection {
   id: ID!
@@ -90,11 +67,7 @@ type CollectionMembership {
   productId: ID!
 }
 ```
-
-This is already decently complicated at a glance, even though it's only four
-objects and an interface. It also clearly doesn't implement all of the features
-that we would need if we're going to be using this API to build out e.g. our
-mobile app's collection feature.
+雖然只有 4 個 object 和 interface，但乍看之下已經很複雜了。如果我們要用它來讓 mobile app 使用 collection 功能的話，這很明顯的還沒有實作完所有的功能。
 
 Let's take a step back. A decently complex GraphQL API will consist of many
 objects, related via multiple paths and with dozens of fields. Trying to design
